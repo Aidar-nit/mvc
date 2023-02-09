@@ -1,19 +1,18 @@
 <?php 
 namespace MyProject\Controllers;
 
-use MyProject\Services\Db;
 use MyProject\View\View;
 use MyProject\Models\Articles\Article;
 
 class ArticlesController 
 {
 	private $view;
-	private $db;
+	
 
 	public function __construct()
 	{
 		$this->view = new View(__DIR__.'/../../../templates/');
-		$this->db = new DB();
+		
 	}
 
 	public function view(int $articleId)
