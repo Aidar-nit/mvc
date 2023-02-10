@@ -89,10 +89,51 @@ abstract class ActiveRecordEntity
         $db->query($sql, $paramValue, static::class);
 
     }
-    
+
     public function insert(array $mappedProperties):void
     {
-        
+        $filteredProperties = array_filter($mappedProperties);
+        $columns = [];
+        $paramsNames = [];
+        $paramsValues = [];
+        foreach ($filteredProperties as $columnName => $value) {
+            $columns[] = '`'.$columnName.'`';
+            $paramName = ':' . $columnName;
+            $paramsNames[] = $paramName;
+            $paramsValues[$paramName] = $value;
+        }
+
+        $columnsViaSemicolon = implode(',', $columns);
+        $paramsNamesViaSemicolon = implode(',', $paramsNames);
+        $sql = 'INSERT INTO ' . static::getTableName() . ' (' . $columnsViaSemicolon . ') VALUES (' . $paramsNamesViaSemicolon . ');';
+        $db = DB::getInstance();
+        $db->query($sql, $paramsValues , static::class);
+        $this->id = $db->getLastInsertId();
+        //$this->refresh();
+        static::getById($this->id);
+
+    }
+    public function refresh(): void
+    {
+       /* $objFromDb = static::getById($this->id);
+
+        $properties = get_object_vars($objFromDb);
+
+        foreach ($properties as $key=>$value) {
+            $this->$key = $value;
+        }*/
+
+        //или
+
+        $objectFromDb = static::getById($this->id);
+        $reflector = new \ReflectionObject($objectFromDb);
+        $properties = $reflector->getProperties();
+
+        foreach ($properties as $property) {
+            $property->setAccessible(true);
+            $propertyName = $property->getName();
+            $this->$propertyName = $property->getValue($objectFromDb);
+        }
     }
 
 

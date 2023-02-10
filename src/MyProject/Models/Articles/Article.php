@@ -19,6 +19,11 @@ class Article extends ActiveRecordEntity
     /** @var string */
     protected $created_at;
 
+    public function setAuthor(User $author):void
+    {
+        $this->author_id = $author->getId();
+    }
+
     public function setName(string $name):void
     {
         $this->name = $name;

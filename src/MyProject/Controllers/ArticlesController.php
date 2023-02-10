@@ -3,6 +3,7 @@ namespace MyProject\Controllers;
 
 use MyProject\View\View;
 use MyProject\Models\Articles\Article;
+use MyProject\Models\Users\User;
 
 class ArticlesController 
 {
@@ -27,7 +28,7 @@ class ArticlesController
         $this->view->renderHtml('articles/view.php', ['article' => $article]);
 	}
 
-	public function edit(int $articleId)
+	public function edit(int $articleId):void
 	{
 		$article = Article::getById($articleId);
 
@@ -39,7 +40,20 @@ class ArticlesController
 		$article->setName('new');
 		$article->setText('new');
 		$article->save();
-		//var_dump($article);
+		
+	}
+
+	public function add(): void
+	{
+		$author = User::getById(1);
+		$article = new Article();
+		$article->setAuthor($author);
+		$article->setName('add new article');
+		$article->setText('add new text');
+		$article->save();
+
+		var_dump($article);
+		 
 	}
 }
 
