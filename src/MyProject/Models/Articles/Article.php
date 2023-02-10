@@ -14,20 +14,29 @@ class Article extends ActiveRecordEntity
     protected $text;
 
     /** @var int */
-    protected $authorId;
+    protected $author_id;
 
     /** @var string */
-    protected $createdAt;
+    protected $created_at;
+
+    public function setName(string $name):void
+    {
+        $this->name = $name;
+    }
+    public function setText(string $text):void
+    {
+        $this->text = $text;
+    }
 
 
     public function getAuthorId(): int
     {
-        return (int) $this->authorId;
+        return (int) $this->author_id;
     }
 
      public function getAuthor(): User
     {
-        return User::getById($this->authorId);
+        return User::getById($this->author_id);
     }
     /**
      * @return string
