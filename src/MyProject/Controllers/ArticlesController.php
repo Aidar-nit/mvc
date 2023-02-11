@@ -55,6 +55,18 @@ class ArticlesController
 		var_dump($article);
 		 
 	}
+	public function delete(int $articleId)
+	{
+		$article = Article::getById($articleId);
+
+		if ($article === null) {
+			$this->view->renderHtml('errors/notFound.php',[], 404);
+			return;
+		}
+		
+		$article->delete();
+		$this->view->renderHtml('articles/delete.php');
+	}
 }
 
 ?>

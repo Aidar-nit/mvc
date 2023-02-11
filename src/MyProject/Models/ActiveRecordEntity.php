@@ -109,9 +109,7 @@ abstract class ActiveRecordEntity
         $db = DB::getInstance();
         $db->query($sql, $paramsValues , static::class);
         $this->id = $db->getLastInsertId();
-        //$this->refresh();
-        static::getById($this->id);
-
+        $this->refresh();
     }
     public function refresh(): void
     {
@@ -134,6 +132,16 @@ abstract class ActiveRecordEntity
             $propertyName = $property->getName();
             $this->$propertyName = $property->getValue($objectFromDb);
         }
+    }
+
+    public function delete(): void
+    {
+        $db = DB::getInstance();
+        $db->query(
+            'DELETE FROM `' . static::getTableName() . '` WHERE id = :id',
+            [':id' => $this->id]
+        );
+        $this->id = null;
     }
 
 
