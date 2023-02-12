@@ -16,7 +16,7 @@ abstract class ActiveRecordEntity
         return $this->id;
     }
 
-	public function __set($name, $value)
+	/*public function __set($name, $value)
     {
         $camelCaseName = $this->underscoreToCamelCase($name);
         $this->$camelCaseName = $value;
@@ -25,7 +25,7 @@ abstract class ActiveRecordEntity
 	private function underscoreToCamelCase(string $source): string
     {
         return lcfirst(str_replace('_', '', ucwords($source, '_')));
-    }
+    }*/
 
 	public static function findAll():array 
     {
@@ -49,7 +49,7 @@ abstract class ActiveRecordEntity
     public function save(): void
     {
         $mappedProperties = $this->mappedProperties();
-        //var_dump($mappedProperties);
+       // var_dump($mappedProperties);
         if ($this->id !== null) 
         {
             $this->update($mappedProperties);
@@ -108,8 +108,11 @@ abstract class ActiveRecordEntity
         $sql = 'INSERT INTO ' . static::getTableName() . ' (' . $columnsViaSemicolon . ') VALUES (' . $paramsNamesViaSemicolon . ');';
         $db = DB::getInstance();
         $db->query($sql, $paramsValues , static::class);
+
         $this->id = $db->getLastInsertId();
         $this->refresh();
+        var_dump($this->id);
+
     }
     public function refresh(): void
     {
@@ -124,6 +127,7 @@ abstract class ActiveRecordEntity
         //или
 
         $objectFromDb = static::getById($this->id);
+       // var_dump($this->id);
         $reflector = new \ReflectionObject($objectFromDb);
         $properties = $reflector->getProperties();
 
@@ -144,7 +148,20 @@ abstract class ActiveRecordEntity
         $this->id = null;
     }
 
+    public static function findOneByColumn(string $columnName, $value):?self
+    {
+        $db = DB::getInstance();
+        $result = $db->query(
+            'SELECT * FROM `' . static::getTableName() . '` WHERE `' . $columnName . '` = :value LIMIT 1;',
+            [':value' => $value], static::class);
 
+
+
+        if ($result === []) {
+            return null;
+        }
+        return $result[0];
+    }
 
     abstract protected static function getTableName():string;
 }

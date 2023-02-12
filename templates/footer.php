@@ -1,17 +1,12 @@
-</td>
+ <!-- Footer -->
+  <footer class="bg-light py-3">
+    <div class="container">
+      <p class="text-center">Copyright &copy; My Website</p>
+    </div>
+  </footer>
 
-        <td width="300px" class="sidebar">
-            <div class="sidebarHeader">Меню</div>
-            <ul>
-                <li><a href="/">Главная страница</a></li>
-                <li><a href="/about-me">Обо мне</a></li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td class="footer" colspan="2">Все права защищены (c) Мой блог</td>
-    </tr>
-</table>
-
-</body>
+  <!-- Add Bootstrap JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPx"></script>
+  </body>
 </html>
