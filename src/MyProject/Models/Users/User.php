@@ -52,7 +52,7 @@ class User extends ActiveRecordEntity
     }
     public function isAdmin(): bool
     {
-        return $this->role === admin;
+        return $this->role === 'admin';
     }
 
     public static function signUp(array $userData):User

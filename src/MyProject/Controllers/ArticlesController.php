@@ -7,6 +7,7 @@ use MyProject\Models\Users\User;
 use MyProject\Exceptions\NotFoundException;
 use MyProject\Exceptions\UnauthorizedException;
 use MyProject\Exceptions\Forbidden;
+use MyProject\Exceptions\InvalidArgumentException;
 
 class ArticlesController extends AbstractController
 {
@@ -29,11 +30,27 @@ class ArticlesController extends AbstractController
 		if ($article === null) {
 			throw new NotFoundException('article not found');	
 		}
+		if ($this->user === null) {
+			throw new UnauthorizedException("Пользователь не авторизован");
+		}
+		if(!$this->user->isAdmin()) {
+            throw new Forbidden('Для изменения статьи нужно обладать правами администратора');
+        }
 
-		$article->setName('new');
-		$article->setText('new');
-		$article->save();
-		
+         if (!empty($_POST)) {
+	        try {
+	            $article->updateFromArray($_POST);
+	        } catch (InvalidArgumentException $e) {
+	            $this->view->renderHtml('articles/edit.php', ['error' => $e->getMessage(), 'article' => $article]);
+	            return;
+	        }
+
+	        header('Location: /articles/' . $article->getId(), true, 302);
+	        exit();
+	    }
+
+    	$this->view->renderHtml('articles/edit.php', ['article' => $article]);
+	
 	}
 
 	public function add(): void
@@ -72,6 +89,9 @@ class ArticlesController extends AbstractController
 		$article->delete();
 		$this->view->renderHtml('articles/delete.php');
 	}
+
+
+
 }
 
 ?>
