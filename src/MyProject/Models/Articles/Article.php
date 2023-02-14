@@ -3,6 +3,8 @@ namespace MyProject\Models\Articles;
 
 use MyProject\Models\Users\User;
 use MyProject\Models\ActiveRecordEntity;
+use MyProject\Exceptions\InvalidArgumentException;
+
 
 class Article extends ActiveRecordEntity
 {
@@ -65,6 +67,24 @@ class Article extends ActiveRecordEntity
         return 'articles';
     }
 
-    
+    public static function createFromArray(array $fields, User $author):Article
+    {
+        if (empty($fields['name'])) {
+        throw new InvalidArgumentException('Не передано название статьи');
+        }
+
+        if (empty($fields['text'])) {
+            throw new InvalidArgumentException('Не передан текст статьи');
+        }
+
+        $article = new Article();
+        $article->setAuthor($author);
+        $article->setName($fields['name']);
+        $article->setText($fields['text']);
+        $article->save();
+
+        return $article;
+
+    }
 
 }

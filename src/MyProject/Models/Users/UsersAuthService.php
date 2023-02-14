@@ -2,6 +2,7 @@
 
 namespace MyProject\Models\Users;
 use MyProject\Models\Users\User;
+
 class UsersAuthService
 {
     public static function createToken(User $user): void
