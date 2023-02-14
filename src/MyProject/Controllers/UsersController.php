@@ -3,16 +3,12 @@ namespace MyProject\Controllers;
 use MyProject\View\View;
 use MyProject\Models\Users\User;
 use MyProject\Exceptions\InvalidArgumentException;
+use MyProject\Models\Users\UserActivationService;
+use MyProject\Models\Users\UsersAuthService;
 
 
-class UsersController
+class UsersController extends AbstractController
 {
-	private $view;
-
-	public function __construct()
-	{
-		$this->view = new View(__DIR__ . '/../../../templates');
-	}
 
 	public function signUp()
 	{
@@ -50,6 +46,23 @@ class UsersController
 	        $user->activate();
 	        echo 'OK!';
 	    }
+	}
+
+
+	public function login()
+	{
+		if (!empty($_POST)) {
+	        try {
+	            $user = User::login($_POST);
+	            UsersAuthService::createToken($user);
+	            header('Location: /');
+	            exit();
+	        } catch (InvalidArgumentException $e) {
+	            $this->view->renderHtml('/users/login.php', ['error' => $e->getMessage()]);
+	            return;
+	        }
+	    }
+	    $this->view->renderHtml('/users/login.php');
 	}
 }
 

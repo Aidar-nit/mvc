@@ -44,12 +44,13 @@
         </ul>
 
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
+          <?= !empty($user) ? 'Привет, ' . $user->getNickname() :
+          '<li class="nav-item">
               <a class="nav-link" href="/users/register">Sign Up</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Sign In</a>
-            </li>
+              <a class="nav-link" href="/users/login">Sign In</a>
+            </li>'?>
       </ul>
       </div>
     </nav>

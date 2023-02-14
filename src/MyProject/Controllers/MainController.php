@@ -3,17 +3,11 @@ namespace MyProject\Controllers;
 
 use MyProject\View\View;
 use MyProject\Models\Articles\Article;
+use MyProject\Models\Users\UsersAuthService;
 
-class MainController 
+class MainController extends AbstractController
 {
-	private $view;
-	private $db;
-
-    public function __construct()
-    {
-        $this->view = new View(__DIR__ . '/../../../templates');
-        
-    }
+	
 
 	public function main()
 	{
